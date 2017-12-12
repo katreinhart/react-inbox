@@ -27,7 +27,7 @@ class Message extends Component {
 
   render() {
     return (
-      <div className={ "row message " + ( this.props.message.read ? 'read' : 'unread' ) + ( this.state.checked ? 'selected' : '') }>
+      <div className={ "row message " + ( this.props.message.read ? 'read' : 'unread' ) + ( this.state.checked ? ' selected' : '') }>
         <div className="col-xs-1">
           <div className="row">
             <div className="col-xs-2">
