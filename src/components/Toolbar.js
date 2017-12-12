@@ -40,14 +40,14 @@ class Toolbar extends Component {
               Mark As Unread
             </button>
     
-            <select className="form-control label-select" id='add-label'>
+            <select className="form-control label-select" id='add-label' onChange={ this.props.onAddLabel }>
               <option>Apply label</option>
               <option value="dev">dev</option>
               <option value="personal">personal</option>
               <option value="gschool">gschool</option>
             </select>
     
-            <select className="form-control label-select" id='remove-label'>
+            <select className="form-control label-select" id='remove-label' onChange={ this.props.onRemoveLabel }>
               <option>Remove label</option>
               <option value="dev">dev</option>
               <option value="personal">personal</option>

@@ -150,6 +150,31 @@ class Inbox extends Component {
     })
   }
 
+  handleAddLabel = (e) => {
+    let label = e.target.value
+    e.target.selectedIndex = 0
+    let nextState = Object.assign({}, this.state) 
+    let checkedMessages = nextState.messages.filter(message=> message.selected)
+    checkedMessages.forEach(message => {
+      if(!message.labels.includes(label))
+        message.labels.push(label)
+    })
+    this.setState({ 
+      messages: [...nextState.messages]
+    })
+  }
+
+  handleRemoveLabel = (e) => {
+    let labelToRemove = e.target.value
+    e.target.selectedIndex = 0
+    let nextState = Object.assign({}, this.state) 
+    let checkedMessages = nextState.messages.filter(message=> message.selected)
+    checkedMessages.forEach(message => message.labels = message.labels.filter(label => label !== labelToRemove))
+    this.setState({ 
+      messages: [...nextState.messages]
+    })
+  }
+
   render() {
     return (
       <div className="App">
@@ -159,6 +184,8 @@ class Inbox extends Component {
           onMarkRead={ this.handleMarkRead }
           onMarkUnread={ this.handleMarkUnread }
           onDelete={ this.handleDelete }
+          onAddLabel={ this.handleAddLabel }
+          onRemoveLabel={ this.handleRemoveLabel }
         />
         <MessageList
           messages={ this.state.messages }

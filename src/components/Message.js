@@ -1,6 +1,11 @@
 import React, { Component } from 'react'
 
 class Message extends Component {
+  displayBadge() {
+    return this.props.message.labels.map(label => {
+      return <span className="badge badge">{ label }</span>
+    })
+  }
 
   render() {
     return (
@@ -17,7 +22,7 @@ class Message extends Component {
         </div>
         <div className="col-xs-11">
           <a href="#">
-            { this.props.message.subject }
+            { this.displayBadge() } { this.props.message.subject }
           </a>
         </div>
       </div>
