@@ -1,6 +1,6 @@
 import React from 'react'
 
-const Header = () => (
+const Toolbar = () => (
   <div className="container">
     <div className="row toolbar">
       <div className="col-md-12">
@@ -43,4 +43,4 @@ const Header = () => (
   </div>
 )
 
-export default Header
+export default Toolbar
