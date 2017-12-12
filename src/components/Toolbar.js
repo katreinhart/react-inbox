@@ -15,8 +15,7 @@ class Toolbar extends Component {
   someAreChecked = () => this.props.messages
     .some(message => message.selected === true)
 
-  noneAreChecked = () => this.props.messages
-    .none(message => message.selected === true)
+  noneAreChecked = () => !this.someAreChecked()
 
   render() {
     return (
@@ -28,33 +27,50 @@ class Toolbar extends Component {
               unread messages
             </p>
     
-            <button className="btn btn-default" onClick={ this.props.onSelectAll }>
+            <button onClick={ this.props.onSelectAll } >
               <i className={ "fa " + ( this.allAreChecked() ? 'fa-check-square-o' : ( this.someAreChecked() ? 'fa-minus-square-o' : 'fa-square-o' )) }></i>
             </button>
     
-            <button className="btn btn-default" onClick={ this.props.onMarkRead }>
+            <button 
+              className={ "btn btn-default" + ( this.noneAreChecked() ? ' disabled' : '' ) } 
+              onClick={ this.props.onMarkRead }
+            >
               Mark As Read
             </button>
     
-            <button className="btn btn-default" onClick={ this.props.onMarkUnread }>
+            <button 
+              className={ "btn btn-default" + ( this.noneAreChecked() ? ' disabled' : '' ) } 
+              onClick={ this.props.onMarkUnread }
+            >
               Mark As Unread
             </button>
     
-            <select className="form-control label-select" id='add-label' onChange={ this.props.onAddLabel }>
+            <select 
+              className="form-control label-select" 
+              disabled={ this.noneAreChecked() }
+              onChange={ this.props.onAddLabel }
+            >
               <option>Apply label</option>
               <option value="dev">dev</option>
               <option value="personal">personal</option>
               <option value="gschool">gschool</option>
             </select>
     
-            <select className="form-control label-select" id='remove-label' onChange={ this.props.onRemoveLabel }>
+            <select 
+              className="form-control label-select" 
+              disabled={ this.noneAreChecked() }
+              onChange={ this.props.onRemoveLabel }
+            >
               <option>Remove label</option>
               <option value="dev">dev</option>
               <option value="personal">personal</option>
               <option value="gschool">gschool</option>
             </select>
     
-            <button className="btn btn-default" onClick={ this.props.onDelete }>
+            <button 
+              className={ "btn btn-default" + ( this.noneAreChecked() ? ' disabled' : '' ) } 
+              onClick={ this.props.onDelete }
+            >
               <i className="fa fa-trash-o"></i>
             </button>
           </div>

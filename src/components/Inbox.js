@@ -78,8 +78,7 @@ class Inbox extends Component {
   someAreChecked = () => this.state.messages
     .some(message => message.selected === true)
 
-  noneAreChecked = () => this.state.messages
-    .none(message => message.selected === true)
+  noneAreChecked = () => !this.someAreChecked()
 
   handleCheck = (e) => {
     let messageId = e.target.id.split('-')[1]
