@@ -5,6 +5,7 @@ class Message extends Component {
     super()
     this.state = {
       checked: false,
+      starred: false,
     }
   }
 
@@ -13,6 +14,14 @@ class Message extends Component {
     this.setState({
       prevState,
       checked: !prevState.checked
+    })
+  }
+
+  handleStar = () => {
+    let prevState = this.state
+    this.setState({
+      prevState,
+      starred: !prevState.starred
     })
   }
 
@@ -25,7 +34,7 @@ class Message extends Component {
               <input type="checkbox" checked={ this.state.checked } onChange={ this.handleCheck }/>
             </div>
             <div className="col-xs-2">
-              <i className="star fa fa-star-o"></i>
+              <i className={ "star fa " + ( this.state.starred ? 'fa-star' : 'fa-star-o' ) } onClick={ this.handleStar }></i>
             </div>
           </div>
         </div>
