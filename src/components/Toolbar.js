@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import pluralize from 'pluralize'
 
 class Toolbar extends Component {
   constructor(props) {
@@ -24,7 +25,7 @@ class Toolbar extends Component {
           <div className="col-md-12">
             <p className="pull-right">
               <span className="badge badge">{ this.countUnread() }</span>
-              unread messages
+              unread { pluralize('message', this.countUnread()) }
             </p>
     
             <button onClick={ this.props.onSelectAll } >
