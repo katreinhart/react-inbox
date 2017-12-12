@@ -10,32 +10,6 @@ class MessageList extends Component {
     }
   }
 
-  handleCheck = (e) => {
-    let messageId = e.target.id.split('-')[1]
-    let prevStateMessages = this.state.messages
-    let [thisMsg] = this.state.messages.filter(message => message.id == messageId)
-    thisMsg.selected = thisMsg.selected ? false : true
-    this.setState({
-      messages: [
-        ...prevStateMessages,
-        thisMsg
-      ]
-    })
-  }
-
-  handleStar = (e) => {
-    let messageId = e.target.id.split('-')[1]
-    let prevStateMessages = this.state.messages
-    let [thisMsg] = this.state.messages.filter(message => message.id == messageId)
-    thisMsg.starred = thisMsg.starred ? false : true
-    this.setState({
-      messages: [
-        ...prevStateMessages,
-        thisMsg
-      ]
-    })
-  }
-
   render() {
     return (
       <div>
@@ -43,8 +17,8 @@ class MessageList extends Component {
             key={ message.id } 
             checked={ message.checked }
             starred={ message.starred }
-            onCheck={ this.handleCheck }
-            onStar={ this.handleStar }
+            onCheck={ this.props.onCheck }
+            onStar={ this.props.onStar }
             message={ message } 
           />)}
       </div>
