@@ -3,7 +3,7 @@ import React, { Component } from 'react'
 class Message extends Component {
   displayBadge() {
     return this.props.message.labels.map(label => {
-      return <span className="badge badge">{ label }</span>
+      return <span className="label label-warning" key={ label }>{ label }</span>
     })
   }
 

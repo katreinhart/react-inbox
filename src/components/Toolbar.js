@@ -27,6 +27,10 @@ class Toolbar extends Component {
               <span className="badge badge">{ this.countUnread() }</span>
               unread { pluralize('message', this.countUnread()) }
             </p>
+
+            <button className="btn btn-danger" onClick={ this.props.onCompose }>
+              <i className="fa fa-plus"></i>
+            </button>
     
             <button onClick={ this.props.onSelectAll } >
               <i className={ "fa " + ( this.allAreChecked() ? 'fa-check-square-o' : ( this.someAreChecked() ? 'fa-minus-square-o' : 'fa-square-o' )) }></i>
