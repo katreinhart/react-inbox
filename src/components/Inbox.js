@@ -2,16 +2,23 @@ import React, { Component } from 'react';
 
 import Toolbar from './Toolbar'
 import MessageList from './MessageList'
+import Compose from './Compose'
 
 class Inbox extends Component {
   constructor() {
     super()
     this.state = {
-      messages: []
+      messages: [],
+      showCompose: false
     }
     this.handleStar = this.handleStar.bind(this)
     this.handleMarkRead = this.handleMarkRead.bind(this)
     this.handleMarkUnread = this.handleMarkUnread.bind(this)
+    this.handleDelete = this.handleDelete.bind(this)
+    this.handleAddLabel = this.handleAddLabel.bind(this)
+    this.handleRemoveLabel = this.handleRemoveLabel.bind(this)
+    this.composeMessage = this.composeMessage.bind(this)
+    this.onSend = this.onSend.bind(this)
   }
 
   async componentDidMount() {
@@ -145,41 +152,125 @@ class Inbox extends Component {
     })
   }
 
-  handleDelete = () => {
+  async handleDelete () {
     let nextState = Object.assign({}, this.state) 
     let remainingMessages = nextState.messages.filter(message=> !message.selected)
+
+    const messageBody = {
+      "messageIds": [],
+      "command": "delete"
+    }
+
+    nextState.messages.forEach(message => {
+      if(message.selected) messageBody.messageIds.push(message.id)
+    })
+
+    await fetch(`${process.env.REACT_APP_API_URL}/api/messages`, {
+      method: 'PATCH',
+      body: JSON.stringify(messageBody),
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+      }
+    })
+
     this.setState({ 
       messages: [...remainingMessages]
     })
   }
 
-  handleAddLabel = (e) => {
+  async handleAddLabel(e) {
     let label = e.target.value
     e.target.selectedIndex = 0
     let nextState = Object.assign({}, this.state) 
     let checkedMessages = nextState.messages.filter(message=> message.selected)
+
+    let messageBody = {
+      "messageIds": [],
+      "command": "addLabel",
+      "label": label
+    }
     checkedMessages.forEach(message => {
       if(!message.labels.includes(label))
+        messageBody.messageIds.push(message.id)
         message.labels.push(label)
     })
+
+    await fetch (`${process.env.REACT_APP_API_URL}/api/messages`, {
+      method: 'PATCH',
+      body: JSON.stringify(messageBody),
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+      }
+    })
+
     this.setState({ 
       messages: [...nextState.messages]
     })
   }
 
-  handleRemoveLabel = (e) => {
+  async handleRemoveLabel(e) {
     let labelToRemove = e.target.value
     e.target.selectedIndex = 0
     let nextState = Object.assign({}, this.state) 
     let checkedMessages = nextState.messages.filter(message=> message.selected)
-    checkedMessages.forEach(message => message.labels = message.labels.filter(label => label !== labelToRemove))
+
+    let messageBody = {
+      "messageIds": [],
+      "command": "addLabel",
+      "label": labelToRemove
+    }
+
+    checkedMessages.forEach(message => {
+      message.labels = message.labels.filter(label => label !== labelToRemove)
+      messageBody.messageIds.push(message.id)
+    })
+
+    await fetch (`${process.env.REACT_APP_API_URL}/api/messages`, {
+      method: 'PATCH',
+      body: JSON.stringify(messageBody),
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+      }
+    })
+
     this.setState({ 
       messages: [...nextState.messages]
     })
   }
 
-  composeMessage () {
-    console.log('compose message')
+  composeMessage (e) {
+    e.preventDefault()
+    this.setState({ 
+      showCompose: !this.state.showCompose
+    })
+  }
+
+  async onSend (e) {
+    e.preventDefault()
+    const subject = e.target.querySelector('input').value
+    const message = e.target.querySelector('textarea').value
+
+    e.target.querySelector('input').value = ''
+    e.target.querySelector('textarea').value = ''
+
+    const body = { subject, message }
+    const response = await fetch(`${process.env.REACT_APP_API_URL}/api/messages`, {
+      method: 'POST',
+      body: JSON.stringify(body),
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+      }
+    })
+    const newMessage = await response.json()
+
+    this.setState({ 
+      messages: [...this.state.messages, newMessage],
+      showCompose: false
+    })
   }
 
   render() {
@@ -195,6 +286,7 @@ class Inbox extends Component {
           onRemoveLabel={ this.handleRemoveLabel }
           onCompose={ this.composeMessage }
         />
+        { this.state.showCompose ? <Compose onSend={ this.onSend }/> : '' }
         <MessageList
           messages={ this.state.messages }
           onCheck={ this.handleCheck }
