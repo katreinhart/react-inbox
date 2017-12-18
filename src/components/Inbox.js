@@ -184,16 +184,19 @@ class Inbox extends Component {
     e.target.selectedIndex = 0
     let nextState = Object.assign({}, this.state) 
     let checkedMessages = nextState.messages.filter(message=> message.selected)
+    console.log(checkedMessages)
 
     let messageBody = {
       "messageIds": [],
       "command": "addLabel",
       "label": label
     }
+
     checkedMessages.forEach(message => {
-      if(!message.labels.includes(label))
+      if(!message.labels.includes(label)){
         messageBody.messageIds.push(message.id)
         message.labels.push(label)
+      }
     })
 
     await fetch (`${process.env.REACT_APP_API_URL}/api/messages`, {
@@ -291,6 +294,8 @@ class Inbox extends Component {
           messages={ this.state.messages }
           onCheck={ this.handleCheck }
           onStar={this.handleStar} 
+          onAddLabel={ this.handleAddLabel }
+          onRemoveLabel={ this.handleRemoveLabel }
         />
       </div>
     );
