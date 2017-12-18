@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React from 'react'
 
 const Compose = ({ onSend }) => ( 
   <form className="form-horizontal well" onSubmit={ onSend }>

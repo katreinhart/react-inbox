@@ -38,7 +38,7 @@ class Inbox extends Component {
   handleCheck = (e) => {
     let messageId = e.target.id.split('-')[1]
     let nextState = Object.assign({}, this.state)
-    let [thisMsg] = nextState.messages.filter(message => message.id == messageId)
+    let [thisMsg] = nextState.messages.filter(message => parseInt(message.id, 10) === parseInt(messageId, 10))
     thisMsg.selected = thisMsg.selected ? false : true
     this.setState({
       messages: [
@@ -69,7 +69,7 @@ class Inbox extends Component {
   async handleStar(e) {
     let messageId = e.target.id.split('-')[1]
     let nextState = Object.assign({}, this.state)
-    let [thisMsg] = this.state.messages.filter(message => message.id == messageId)
+    let [thisMsg] = this.state.messages.filter(message => parseInt(message.id, 10) === parseInt(messageId, 10))
     thisMsg.starred = thisMsg.starred ? false : true
 
     const messageBody = {

@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React from 'react'
 
 const Message = ({ checked, starred, onCheck, onStar, message, onAddLabel, onRemoveLabel }) => {
 
@@ -21,7 +21,7 @@ const Message = ({ checked, starred, onCheck, onStar, message, onAddLabel, onRem
       </div>
     </div>
     <div className="col-xs-11">
-      <a href="#">
+      <a href="">
         { displayBadge(message) } { message.subject }
       </a>
     </div>
