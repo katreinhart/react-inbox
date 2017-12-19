@@ -9,7 +9,6 @@ import store from './store'
 import { fetchMessages } from './actions'
 
 store.dispatch(fetchMessages())
-console.log(store.getState())
 
 class App extends Component {
   render() {

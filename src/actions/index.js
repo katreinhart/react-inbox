@@ -19,3 +19,25 @@ export function toggleCompose() {
     })
   }
 }
+
+export const SEND_MESSAGE = 'SEND_MESSAGE'
+export function sendMessage(body) {
+  return async function(dispatch) {
+    const response = await fetch(`${process.env.REACT_APP_API_URL}/api/messages`, {
+      method: 'POST',
+      body: JSON.stringify(body),
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+      }
+    })
+    const newMessage = await response.json()
+    dispatch({
+      type: SEND_MESSAGE,
+      message: newMessage
+    })
+    dispatch({
+      type: TOGGLE_COMPOSE
+    })
+  }
+}

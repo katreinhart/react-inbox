@@ -1,6 +1,9 @@
 import { combineReducers } from 'redux'
-import { MESSAGES_RECEIVED, TOGGLE_COMPOSE } from '../actions'
-
+import {
+  MESSAGES_RECEIVED,
+  TOGGLE_COMPOSE,
+  SEND_MESSAGE
+} from '../actions'
 
 const initialState = { 
   messages: [],
@@ -10,9 +13,9 @@ const initialState = {
 function messages(state = initialState, action) {
   switch (action.type) {
     case MESSAGES_RECEIVED:
-      const messages = [...action.messages]
-      return messages
-
+      return [...action.messages]
+    case SEND_MESSAGE:
+      return [...state, action.message]
     default:
       return state
   }
