@@ -7,6 +7,7 @@ import {
   fetchMessages,
   toggleCompose,
   sendMessage,
+  toggleCheck
 } from '../actions/index';
 
 class Inbox extends Component {
@@ -40,14 +41,7 @@ class Inbox extends Component {
 
   handleCheck = (e) => {
     let messageId = e.target.id.split('-')[1]
-    let nextState = Object.assign({}, this.state)
-    let [thisMsg] = nextState.messages.filter(message => parseInt(message.id, 10) === parseInt(messageId, 10))
-    thisMsg.selected = thisMsg.selected ? false : true
-    this.setState({
-      messages: [
-        ...nextState.messages
-      ]
-    })
+    this.props.toggleCheck(messageId)
   }
   
   handleSelectAll = () => {
@@ -304,6 +298,9 @@ const mapDispatchToProps = dispatch => ({
   },
   sendMessage: (message) => {
     sendMessage(message)(dispatch)
+  },
+  toggleCheck: (id) => {
+    toggleCheck(id)(dispatch)
   }
 })
 

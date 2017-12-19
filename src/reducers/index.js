@@ -2,7 +2,8 @@ import { combineReducers } from 'redux'
 import {
   MESSAGES_RECEIVED,
   TOGGLE_COMPOSE,
-  SEND_MESSAGE
+  SEND_MESSAGE,
+  TOGGLE_CHECK
 } from '../actions'
 
 const initialState = { 
@@ -16,6 +17,11 @@ function messages(state = initialState, action) {
       return [...action.messages]
     case SEND_MESSAGE:
       return [...state, action.message]
+    case TOGGLE_CHECK: 
+      return state.map(msg => {
+        if(msg.id !== action.id) return msg
+        else return { ...msg, selected: !msg.selected }
+      })
     default:
       return state
   }

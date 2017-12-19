@@ -41,3 +41,13 @@ export function sendMessage(body) {
     })
   }
 }
+
+export const TOGGLE_CHECK = 'TOGGLE_CHECK'
+export function toggleCheck(id) {
+  return function(dispatch) {
+    dispatch({ 
+      type: TOGGLE_CHECK,
+      id
+    })
+  }
+}
