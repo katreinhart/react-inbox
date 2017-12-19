@@ -63,7 +63,7 @@ class Inbox extends Component {
 
   handleStar(e) {
     let messageId = e.target.id.split('-')[1]
-    let starred = this.props.messages.filter(msg => msg.id == messageId).starred
+    let starred = this.props.messages.filter(msg => msg.id === parseInt(messageId, 10)).starred
 
     this.props.handleStar(messageId, starred)
   }
