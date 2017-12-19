@@ -9,7 +9,9 @@ import {
   sendMessage,
   toggleCheck,
   handleCheckAll,
-  handleStar
+  handleStar,
+  markRead,
+  markUnread
 } from '../actions/index';
 
 class Inbox extends Component {
@@ -61,62 +63,18 @@ class Inbox extends Component {
     this.props.handleStar(messageId, starred)
   }
 
-  async handleMarkRead () {
-    let nextState = Object.assign({}, this.state) 
-    let checkedMessages = nextState.messages.filter(message=> message.selected)
-    
-    const messageBody = {
-      "messageIds": [],
-      "command": "read",
-      "read": true
-    }
-    
-    checkedMessages.forEach(message => {
-      messageBody.messageIds.push(message.id)
-      message.read = true
-    })
-
-    await fetch(`${process.env.REACT_APP_API_URL}/api/messages`, {
-      method: 'PATCH',
-      body: JSON.stringify(messageBody),
-      headers: {
-        'Content-Type': 'application/json',
-        'Accept': 'application/json',
-      }
-    })
-
-    this.setState({ 
-      messages: [...nextState.messages]
-    })
+  handleMarkRead () {
+    let messageIds = this.props.messages
+      .filter(message=> message.selected)
+      .map(message => message.id)
+    this.props.markRead(messageIds)
   }
 
-  async handleMarkUnread () {
-    let nextState = Object.assign({}, this.state) 
-    let checkedMessages = nextState.messages.filter(message=> message.selected)
-
-    const messageBody = {
-      "messageIds": [],
-      "command": "read",
-      "read": false
-    }
-
-    checkedMessages.forEach(message => {
-      messageBody.messageIds.push(message.id)
-      message.read = false
-    })
-
-    await fetch(`${process.env.REACT_APP_API_URL}/api/messages`, {
-      method: 'PATCH',
-      body: JSON.stringify(messageBody),
-      headers: {
-        'Content-Type': 'application/json',
-        'Accept': 'application/json',
-      }
-    })
-
-    this.setState({ 
-      messages: [...nextState.messages]
-    })
+  handleMarkUnread () {
+    let messageIds = this.props.messages
+      .filter(message => message.selected)
+      .map(message => message.id)
+    this.props.markUnread(messageIds)
   }
 
   async handleDelete () {
@@ -277,6 +235,12 @@ const mapDispatchToProps = dispatch => ({
   },
   handleStar: (id, starred) => {
     handleStar(id, starred)(dispatch)
+  },
+  markRead: (ids) => {
+    markRead(ids)(dispatch)
+  },
+  markUnread: (ids) => {
+    markUnread(ids)(dispatch)
   }
 })
 

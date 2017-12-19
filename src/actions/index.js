@@ -65,7 +65,6 @@ export function handleCheckAll (allSelected) {
 export const TOGGLE_STAR = 'TOGGLE_STAR'
 export function handleStar(id, starred) {
   return async function(dispatch) {
-    
     const messageBody = {
       "messageIds": [ id ],
       "command": "star",
@@ -83,6 +82,56 @@ export function handleStar(id, starred) {
     dispatch({
       type: TOGGLE_STAR,
       id
+    })
+  }
+}
+
+export const MARK_READ = 'MARK_READ'
+export function markRead(ids) {
+  return async function(dispatch) {
+    const messageBody = {
+      "messageIds": ids,
+      "command": "read",
+      "read": true
+    }
+
+    await fetch(`${process.env.REACT_APP_API_URL}/api/messages`, {
+      method: 'PATCH',
+      body: JSON.stringify(messageBody),
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+      }
+    })
+
+    dispatch({
+      type: MARK_READ,
+      ids
+    })
+  }
+}
+
+export const MARK_UNREAD = 'MARK_UNREAD'
+export function markUnread(ids) {
+  return async function(dispatch) {
+    const messageBody = {
+      "messageIds": ids,
+      "command": "read",
+      "read": false
+    }
+
+    await fetch(`${process.env.REACT_APP_API_URL}/api/messages`, {
+      method: 'PATCH',
+      body: JSON.stringify(messageBody),
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+      }
+    })
+
+    dispatch({
+      type: MARK_UNREAD,
+      ids
     })
   }
 }
