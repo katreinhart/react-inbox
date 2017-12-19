@@ -8,7 +8,9 @@ import {
   TOGGLE_STAR,
   MARK_READ,
   MARK_UNREAD,
-  DELETE_MESSAGES
+  DELETE_MESSAGES,
+  ADD_LABEL,
+  REMOVE_LABEL
 } from '../actions'
 
 const initialState = { 
@@ -63,6 +65,19 @@ function messages(state = initialState, action) {
       })
     case DELETE_MESSAGES: 
       return state.filter(msg => !action.ids.includes(msg.id))
+    case ADD_LABEL:
+      return state.map(msg => {
+        if((action.ids.includes(msg.id)) && (!msg.labels.includes(action.label))) {
+          return { ...msg, labels: [...msg.labels, action.label]}
+        } else return msg 
+      })
+    case REMOVE_LABEL:
+      return state.map(msg => {
+        if((action.ids.includes(msg.id)) && (msg.labels.includes(action.label))) {
+          let newLabels = msg.labels.filter(label => label !== action.label)
+          return { ...msg, labels: newLabels }
+        } else return msg 
+      })
     default:
       return state
   }

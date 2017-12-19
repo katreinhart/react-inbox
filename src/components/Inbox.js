@@ -12,7 +12,9 @@ import {
   handleStar,
   markRead,
   markUnread,
-  deleteMessages
+  deleteMessages,
+  addLabel,
+  removeLabel,
 } from '../actions/index';
 
 class Inbox extends Component {
@@ -88,66 +90,23 @@ class Inbox extends Component {
   async handleAddLabel(e) {
     let label = e.target.value
     e.target.selectedIndex = 0
-    let nextState = Object.assign({}, this.state) 
-    let checkedMessages = nextState.messages.filter(message=> message.selected)
-    console.log(checkedMessages)
+    let messageIds = this.props.messages
+      .filter(message => message.selected)
+      .filter(message => !message.labels.includes(label))
+      .map(message => message.id)
 
-    let messageBody = {
-      "messageIds": [],
-      "command": "addLabel",
-      "label": label
-    }
-
-    checkedMessages.forEach(message => {
-      if(!message.labels.includes(label)){
-        messageBody.messageIds.push(message.id)
-        message.labels.push(label)
-      }
-    })
-
-    await fetch (`${process.env.REACT_APP_API_URL}/api/messages`, {
-      method: 'PATCH',
-      body: JSON.stringify(messageBody),
-      headers: {
-        'Content-Type': 'application/json',
-        'Accept': 'application/json',
-      }
-    })
-
-    this.setState({ 
-      messages: [...nextState.messages]
-    })
+    this.props.addLabel(messageIds, label)
   }
 
-  async handleRemoveLabel(e) {
+  handleRemoveLabel(e) {
     let labelToRemove = e.target.value
     e.target.selectedIndex = 0
-    let nextState = Object.assign({}, this.state) 
-    let checkedMessages = nextState.messages.filter(message=> message.selected)
-
-    let messageBody = {
-      "messageIds": [],
-      "command": "addLabel",
-      "label": labelToRemove
-    }
-
-    checkedMessages.forEach(message => {
-      message.labels = message.labels.filter(label => label !== labelToRemove)
-      messageBody.messageIds.push(message.id)
-    })
-
-    await fetch (`${process.env.REACT_APP_API_URL}/api/messages`, {
-      method: 'PATCH',
-      body: JSON.stringify(messageBody),
-      headers: {
-        'Content-Type': 'application/json',
-        'Accept': 'application/json',
-      }
-    })
-
-    this.setState({ 
-      messages: [...nextState.messages]
-    })
+    let messageIds = this.props.messages
+      .filter(message => message.selected)
+      .filter(message => message.labels.includes(labelToRemove))
+      .map(message => message.id)
+    
+    this.props.removeLabel(messageIds, labelToRemove)
   }
 
   composeMessage (e) {
@@ -155,7 +114,7 @@ class Inbox extends Component {
     this.props.toggleCompose()
   }
 
-  async onSend (e) {
+  onSend (e) {
     e.preventDefault()
     const subject = e.target.querySelector('input').value
     const message = e.target.querySelector('textarea').value
@@ -225,6 +184,12 @@ const mapDispatchToProps = dispatch => ({
   },
   deleteMessages: (ids) => {
     deleteMessages(ids)(dispatch)
+  },
+  addLabel: (ids, label) => {
+    addLabel(ids, label)(dispatch)
+  },
+  removeLabel: (ids, label) => {
+    removeLabel(ids, label)(dispatch)
   }
 })
 

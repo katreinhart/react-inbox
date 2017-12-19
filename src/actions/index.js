@@ -157,3 +157,55 @@ export function deleteMessages(ids) {
     })
   }
 }
+
+export const ADD_LABEL = 'ADD_LABEL'
+export function addLabel(ids, label) {
+  return async function(dispatch) {
+    let messageBody = {
+      "messageIds": [],
+      "command": "addLabel",
+      "label": label
+    }
+
+    await fetch (`${process.env.REACT_APP_API_URL}/api/messages`, {
+      method: 'PATCH',
+      body: JSON.stringify(messageBody),
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+      }
+    })
+
+    dispatch({
+      type: 'ADD_LABEL',
+      ids,
+      label
+    })
+  }
+}
+
+export const REMOVE_LABEL = 'REMOVE_LABEL'
+export function removeLabel(ids, label) {
+  return async function(dispatch) {
+    let messageBody = {
+      "messageIds": [],
+      "command": "addLabel",
+      "label": label
+    }
+  
+    await fetch (`${process.env.REACT_APP_API_URL}/api/messages`, {
+      method: 'PATCH',
+      body: JSON.stringify(messageBody),
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+      }
+    })
+  
+    dispatch({
+      type: 'REMOVE_LABEL',
+      ids,
+      label
+    })
+  }
+}
