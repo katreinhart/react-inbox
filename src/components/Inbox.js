@@ -8,7 +8,8 @@ import {
   toggleCompose,
   sendMessage,
   toggleCheck,
-  handleCheckAll
+  handleCheckAll,
+  handleStar
 } from '../actions/index';
 
 class Inbox extends Component {
@@ -46,7 +47,6 @@ class Inbox extends Component {
   }
   
   handleSelectAll = () => {
-    console.log('select all buddy')
     if(this.allAreChecked()) {
       this.props.handleCheckAll(true)
     } else {
@@ -54,32 +54,11 @@ class Inbox extends Component {
     }
   }
 
-  async handleStar(e) {
+  handleStar(e) {
     let messageId = e.target.id.split('-')[1]
-    let nextState = Object.assign({}, this.state)
-    let [thisMsg] = this.state.messages.filter(message => parseInt(message.id, 10) === parseInt(messageId, 10))
-    thisMsg.starred = thisMsg.starred ? false : true
+    let starred = this.props.messages.filter(msg => msg.id == messageId).starred
 
-    const messageBody = {
-      "messageIds": [ thisMsg.id ],
-      "command": "star",
-      "star": thisMsg.starred
-    }
-
-    await fetch(`${process.env.REACT_APP_API_URL}/api/messages`, {
-      method: 'PATCH',
-      body: JSON.stringify(messageBody),
-      headers: {
-        'Content-Type': 'application/json',
-        'Accept': 'application/json',
-      }
-    })
-
-    this.setState({
-      messages: [
-        ...nextState.messages
-      ]
-    })
+    this.props.handleStar(messageId, starred)
   }
 
   async handleMarkRead () {
@@ -295,6 +274,9 @@ const mapDispatchToProps = dispatch => ({
   },
   handleCheckAll: (allSelected) => {
     handleCheckAll(allSelected)(dispatch)
+  },
+  handleStar: (id, starred) => {
+    handleStar(id, starred)(dispatch)
   }
 })
 

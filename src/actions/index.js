@@ -56,8 +56,33 @@ export const TOGGLE_SELECT_ALL = 'TOGGLE_SELECT_ALL'
 export function handleCheckAll (allSelected) {
   return function(dispatch) {
     dispatch({ 
-      type: 'TOGGLE_SELECT_ALL',
+      type: TOGGLE_SELECT_ALL,
       allSelected
+    })
+  }
+}
+
+export const TOGGLE_STAR = 'TOGGLE_STAR'
+export function handleStar(id, starred) {
+  return async function(dispatch) {
+    
+    const messageBody = {
+      "messageIds": [ id ],
+      "command": "star",
+      "star": starred
+    }
+
+    await fetch(`${process.env.REACT_APP_API_URL}/api/messages`, {
+      method: 'PATCH',
+      body: JSON.stringify(messageBody),
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+      }
+    })
+    dispatch({
+      type: TOGGLE_STAR,
+      id
     })
   }
 }

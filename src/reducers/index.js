@@ -4,7 +4,8 @@ import {
   TOGGLE_COMPOSE,
   SEND_MESSAGE,
   TOGGLE_CHECK,
-  TOGGLE_SELECT_ALL
+  TOGGLE_SELECT_ALL,
+  TOGGLE_STAR
 } from '../actions'
 
 const initialState = { 
@@ -27,7 +28,6 @@ function messages(state = initialState, action) {
       })
     case TOGGLE_SELECT_ALL: 
       if(action.allSelected === true) {
-        console.log('all selerd')
         return state.map(msg => ({
           ...msg,
           selected: false
@@ -39,6 +39,13 @@ function messages(state = initialState, action) {
           selected: true
         }))
       }
+    case TOGGLE_STAR:
+      return state.map(msg => {
+        if(parseInt(msg.id, 10) !== parseInt(action.id, 10)) return msg
+        else if (!msg.starred) {
+          return { ...msg, starred: true }
+        } else return { ...msg, starred: false }
+      })
     default:
       return state
   }
