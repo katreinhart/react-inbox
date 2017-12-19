@@ -4,8 +4,9 @@ import { composeWithDevTools } from 'redux-devtools-extension'
 import rootReducer from './reducers'
 import logger from 'redux-logger'
 
-const initialState = { 
-  messages: []
+export const initialState = { 
+  messages: [],
+  showCompose: false
 }
 
 const middleware = [
@@ -15,10 +16,10 @@ const middleware = [
 
 const store = createStore(
   rootReducer, 
+  initialState, 
   composeWithDevTools(
-    applyMiddleware(...middleware),
-    // other store enhancers if any
+    applyMiddleware(...middleware)
   )
-);
+)
 
 export default store

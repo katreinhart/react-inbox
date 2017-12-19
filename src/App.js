@@ -6,6 +6,10 @@ import './App.css';
 import Inbox from './components/Inbox'
 import store from './store'
 
+import { fetchMessages } from './actions'
+
+store.dispatch(fetchMessages())
+
 class App extends Component {
   render() {
     return (

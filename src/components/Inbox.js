@@ -1,16 +1,16 @@
-import React, { Component } from 'react';
+import React, { Component } from 'react'
+import { connect } from 'react-redux'
 
 import Toolbar from './Toolbar'
 import MessageList from './MessageList'
 import Compose from './Compose'
 
+import { fetchMessages } from '../actions'
+
 class Inbox extends Component {
-  constructor() {
-    super()
-    this.state = {
-      messages: [],
-      showCompose: false
-    }
+  constructor(props) {
+    super(props)
+    
     this.handleStar = this.handleStar.bind(this)
     this.handleMarkRead = this.handleMarkRead.bind(this)
     this.handleMarkUnread = this.handleMarkUnread.bind(this)
@@ -21,10 +21,14 @@ class Inbox extends Component {
     this.onSend = this.onSend.bind(this)
   }
 
-  async componentDidMount() {
-    const result = await fetch(`${process.env.REACT_APP_API_URL}/api/messages`)
-    const { _embedded: { messages }} = await result.json()
-    this.setState({ messages })
+  // async componentDidMount() {
+  //   const result = await fetch(`${process.env.REACT_APP_API_URL}/api/messages`)
+  //   const { _embedded: { messages }} = await result.json()
+  //   this.setState({ messages })
+  // }
+
+  componentDidMount() {
+    
   }
 
   allAreChecked = () => this.state.messages
@@ -277,10 +281,11 @@ class Inbox extends Component {
   }
 
   render() {
+    console.log('this.props.messages', this.props.messages)
     return (
       <div className="App">
         <Toolbar 
-          messages={ this.state.messages }
+          messages={ this.props.messages }
           onSelectAll={ this.handleSelectAll }
           onMarkRead={ this.handleMarkRead }
           onMarkUnread={ this.handleMarkUnread }
@@ -289,9 +294,9 @@ class Inbox extends Component {
           onRemoveLabel={ this.handleRemoveLabel }
           onCompose={ this.composeMessage }
         />
-        { this.state.showCompose ? <Compose onSend={ this.onSend }/> : '' }
+        { this.props.showCompose ? <Compose onSend={ this.onSend }/> : '' }
         <MessageList
-          messages={ this.state.messages }
+          messages={ this.props.messages }
           onCheck={ this.handleCheck }
           onStar={this.handleStar} 
           onAddLabel={ this.handleAddLabel }
@@ -302,4 +307,20 @@ class Inbox extends Component {
   }
 }
 
-export default Inbox;
+const mapStateToProps = state => {
+  console.log('mstp call', state)
+  const { messages , showCompose } = state
+  console.log('messages', messages.messages)
+  return (
+    {
+      messages: messages,
+      showCompose: showCompose
+    }
+  )
+}
+
+// const mapDispatchToProps = () => ({
+//   fetchMessages: fetchMessages
+// })
+
+export default connect(mapStateToProps, { fetchMessages })(Inbox);

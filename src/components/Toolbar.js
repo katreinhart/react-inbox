@@ -1,5 +1,6 @@
 import React from 'react'
 import pluralize from 'pluralize'
+import { connect } from 'react-redux'
 
 const Toolbar = ({ 
   messages,
@@ -11,7 +12,6 @@ const Toolbar = ({
   onRemoveLabel,
   onCompose 
 }) => {
-  
   const countUnread = () => messages
     .filter(message=> message.read === false)
     .length
@@ -88,4 +88,10 @@ const Toolbar = ({
   )
 }
 
-export default Toolbar
+const mapStateToProps = (state) => ({
+  messages: state.messages
+})
+
+const mapDispatchToProps = () => ({})
+
+export default connect(mapStateToProps, mapDispatchToProps)(Toolbar)
