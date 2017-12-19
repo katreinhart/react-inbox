@@ -11,7 +11,8 @@ import {
   handleCheckAll,
   handleStar,
   markRead,
-  markUnread
+  markUnread,
+  deleteMessages
 } from '../actions/index';
 
 class Inbox extends Component {
@@ -77,31 +78,11 @@ class Inbox extends Component {
     this.props.markUnread(messageIds)
   }
 
-  async handleDelete () {
-    let nextState = Object.assign({}, this.state) 
-    let remainingMessages = nextState.messages.filter(message=> !message.selected)
-
-    const messageBody = {
-      "messageIds": [],
-      "command": "delete"
-    }
-
-    nextState.messages.forEach(message => {
-      if(message.selected) messageBody.messageIds.push(message.id)
-    })
-
-    await fetch(`${process.env.REACT_APP_API_URL}/api/messages`, {
-      method: 'PATCH',
-      body: JSON.stringify(messageBody),
-      headers: {
-        'Content-Type': 'application/json',
-        'Accept': 'application/json',
-      }
-    })
-
-    this.setState({ 
-      messages: [...remainingMessages]
-    })
+  handleDelete () {
+    let messageIds = this.props.messages
+      .filter(message => message.selected)
+      .map(message => message.id)
+    this.props.deleteMessages(messageIds)
   }
 
   async handleAddLabel(e) {
@@ -241,6 +222,9 @@ const mapDispatchToProps = dispatch => ({
   },
   markUnread: (ids) => {
     markUnread(ids)(dispatch)
+  },
+  deleteMessages: (ids) => {
+    deleteMessages(ids)(dispatch)
   }
 })
 

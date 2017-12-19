@@ -135,3 +135,25 @@ export function markUnread(ids) {
     })
   }
 }
+
+export const DELETE_MESSAGES = 'DELETE_MESSAGES'
+export function deleteMessages(ids) {
+  return async function(dispatch) {
+    const messageBody = {
+      "messageIds": ids,
+      "command": "delete"
+    }
+    await fetch(`${process.env.REACT_APP_API_URL}/api/messages`, {
+      method: 'PATCH',
+      body: JSON.stringify(messageBody),
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+      }
+    })
+    dispatch({
+      type: DELETE_MESSAGES,
+      ids
+    })
+  }
+}

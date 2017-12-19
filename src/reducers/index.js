@@ -7,7 +7,8 @@ import {
   TOGGLE_SELECT_ALL,
   TOGGLE_STAR,
   MARK_READ,
-  MARK_UNREAD
+  MARK_UNREAD,
+  DELETE_MESSAGES
 } from '../actions'
 
 const initialState = { 
@@ -55,11 +56,13 @@ function messages(state = initialState, action) {
         } else return msg
       })
     case MARK_UNREAD: 
-    return state.map(msg => {
-      if(action.ids.includes(msg.id)) {
-        return { ...msg, read: false }
-      } else return msg
-    })
+      return state.map(msg => {
+        if(action.ids.includes(msg.id)) {
+          return { ...msg, read: false }
+        } else return msg
+      })
+    case DELETE_MESSAGES: 
+      return state.filter(msg => !action.ids.includes(msg.id))
     default:
       return state
   }
