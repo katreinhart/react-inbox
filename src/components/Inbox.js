@@ -1,8 +1,10 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
+
 import Toolbar from './Toolbar'
 import MessageList from './MessageList'
 import Compose from './Compose'
+
 import { 
   fetchMessages,
   toggleCompose,
