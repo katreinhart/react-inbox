@@ -1,6 +1,6 @@
 import React from 'react'
 
-const Message = ({ checked, starred, onCheck, onStar, message, onAddLabel, onRemoveLabel }) => {
+const Message = ({ selected, starred, onCheck, onStar, message, onAddLabel, onRemoveLabel }) => {
 
   const displayBadge = (message) => {
     return message.labels.map(label => {

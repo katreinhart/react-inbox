@@ -300,6 +300,7 @@ const mapDispatchToProps = dispatch => ({
     sendMessage(message)(dispatch)
   },
   toggleCheck: (id) => {
+    console.log('toggle check', id)
     toggleCheck(id)(dispatch)
   }
 })

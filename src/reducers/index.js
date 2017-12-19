@@ -19,8 +19,10 @@ function messages(state = initialState, action) {
       return [...state, action.message]
     case TOGGLE_CHECK: 
       return state.map(msg => {
-        if(msg.id !== action.id) return msg
-        else return { ...msg, selected: !msg.selected }
+        if(parseInt(msg.id, 10) !== parseInt(action.id, 10)) return msg
+        else if (!msg.selected) {
+          return { ...msg, selected: true }
+        } else return { ...msg, selected: false }
       })
     default:
       return state

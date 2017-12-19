@@ -5,7 +5,7 @@ const MessageList = ({ messages, onCheck, onStar }) => (
   <div>
     { messages.map(message => <Message 
         key={ message.id } 
-        checked={ message.checked }
+        selected={ message.selected }
         starred={ message.starred }
         onCheck={ onCheck }
         onStar={ onStar }
