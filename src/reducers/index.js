@@ -10,8 +10,8 @@ const initialState = {
 function messages(state = initialState, action) {
   switch (action.type) {
     case MESSAGES_RECEIVED:
-      const messages = action.messages
-      return [...messages]
+      const messages = [...action.messages]
+      return messages
 
     default:
       return state
@@ -21,9 +21,7 @@ function messages(state = initialState, action) {
 function toggleCompose (state = initialState, action ) {
   switch(action.type) {
     case TOGGLE_COMPOSE:
-      return {
-        showCompose: !state.showCompose
-      }
+      return !state
     default:
       return state
   }

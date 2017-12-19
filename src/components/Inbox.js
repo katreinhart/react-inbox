@@ -1,16 +1,17 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-
 import Toolbar from './Toolbar'
 import MessageList from './MessageList'
 import Compose from './Compose'
-
-import { fetchMessages, toggleCompose } from '../actions'
+import { fetchMessages, toggleCompose } from '../actions/index';
 
 class Inbox extends Component {
-  constructor(props) {
-    super(props)
-    
+  constructor() {
+    super()
+    this.state = {
+      messages: [],
+      showCompose: false
+    }
     this.handleStar = this.handleStar.bind(this)
     this.handleMarkRead = this.handleMarkRead.bind(this)
     this.handleMarkUnread = this.handleMarkUnread.bind(this)
@@ -21,14 +22,12 @@ class Inbox extends Component {
     this.onSend = this.onSend.bind(this)
   }
 
-  // async componentDidMount() {
-  //   const result = await fetch(`${process.env.REACT_APP_API_URL}/api/messages`)
-  //   const { _embedded: { messages }} = await result.json()
-  //   this.setState({ messages })
-  // }
-
   componentDidMount() {
-    fetchMessages()
+    // const result = await fetch(`${process.env.REACT_APP_API_URL}/api/messages`)
+    // const { _embedded: { messages }} = await result.json()
+    // this.setState({ messages })
+    this.props.fetchMessages()
+    
   }
 
   allAreChecked = () => this.state.messages
@@ -42,7 +41,7 @@ class Inbox extends Component {
   handleCheck = (e) => {
     let messageId = e.target.id.split('-')[1]
     let nextState = Object.assign({}, this.state)
-    let [thisMsg] = nextState.messages.filter(message => parseInt(message.id, 10) === parseInt(messageId, 10))
+    let [thisMsg] = nextState.messages.filter(message => message.id == messageId)
     thisMsg.selected = thisMsg.selected ? false : true
     this.setState({
       messages: [
@@ -73,7 +72,7 @@ class Inbox extends Component {
   async handleStar(e) {
     let messageId = e.target.id.split('-')[1]
     let nextState = Object.assign({}, this.state)
-    let [thisMsg] = this.state.messages.filter(message => parseInt(message.id, 10) === parseInt(messageId, 10))
+    let [thisMsg] = this.state.messages.filter(message => message.id == messageId)
     thisMsg.starred = thisMsg.starred ? false : true
 
     const messageBody = {
@@ -250,9 +249,7 @@ class Inbox extends Component {
 
   composeMessage (e) {
     e.preventDefault()
-    console.log('sc', this.props.toggleCompose)
-    console.log('d', this.props.dispatch)
-    toggleCompose(this.props.dispatch)
+    this.props.toggleCompose()
   }
 
   async onSend (e) {
@@ -281,7 +278,6 @@ class Inbox extends Component {
   }
 
   render() {
-    console.log('this.props.showCompose', this.props.showCompose)
     return (
       <div className="App">
         <Toolbar 
@@ -307,18 +303,18 @@ class Inbox extends Component {
   }
 }
 
-const mapStateToProps = state => {
-  const { messages , showCompose } = state
-  return (
-    {
-      messages: messages,
-      showCompose: toggleCompose
-    }
-  )
-}
+const mapStateToProps = state => ({
+  messages: state.messages,
+  showCompose: state.showCompose
+})
 
-// const mapDispatchToProps = () => ({
-//   fetchMessages: fetchMessages
-// })
+const mapDispatchToProps = dispatch => ({
+  fetchMessages: () => {
+    fetchMessages(dispatch)
+  },
+  toggleCompose: () => {
+    toggleCompose()(dispatch)
+  }
+})
 
-export default connect(mapStateToProps, { fetchMessages, toggleCompose })(Inbox);
+export default connect(mapStateToProps, mapDispatchToProps)(Inbox);
