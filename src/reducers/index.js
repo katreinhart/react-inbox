@@ -3,7 +3,8 @@ import {
   MESSAGES_RECEIVED,
   TOGGLE_COMPOSE,
   SEND_MESSAGE,
-  TOGGLE_CHECK
+  TOGGLE_CHECK,
+  TOGGLE_SELECT_ALL
 } from '../actions'
 
 const initialState = { 
@@ -24,6 +25,20 @@ function messages(state = initialState, action) {
           return { ...msg, selected: true }
         } else return { ...msg, selected: false }
       })
+    case TOGGLE_SELECT_ALL: 
+      if(action.allSelected === true) {
+        console.log('all selerd')
+        return state.map(msg => ({
+          ...msg,
+          selected: false
+        }))
+      }
+      else{
+        return state.map(msg => ({
+          ...msg,
+          selected: true
+        }))
+      }
     default:
       return state
   }

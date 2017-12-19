@@ -7,7 +7,8 @@ import {
   fetchMessages,
   toggleCompose,
   sendMessage,
-  toggleCheck
+  toggleCheck,
+  handleCheckAll
 } from '../actions/index';
 
 class Inbox extends Component {
@@ -31,10 +32,10 @@ class Inbox extends Component {
     this.props.fetchMessages()
   }
 
-  allAreChecked = () => this.state.messages
+  allAreChecked = () => this.props.messages
     .every(message => message.selected === true)
 
-  someAreChecked = () => this.state.messages
+  someAreChecked = () => this.props.messages
     .some(message => message.selected === true)
 
   noneAreChecked = () => !this.someAreChecked()
@@ -45,22 +46,12 @@ class Inbox extends Component {
   }
   
   handleSelectAll = () => {
-    let nextState = Object.assign({}, this.state)
-    let newStateMessages
+    console.log('select all buddy')
     if(this.allAreChecked()) {
-      newStateMessages = nextState.messages.map(message => {
-        message.selected = false
-        return message
-      })
+      this.props.handleCheckAll(true)
     } else {
-      newStateMessages = nextState.messages.map(message => {
-        message.selected = true
-        return message
-      })
+      this.props.handleCheckAll(false)
     }
-    this.setState({ 
-      messages: [...newStateMessages]
-    })
   }
 
   async handleStar(e) {
@@ -300,8 +291,10 @@ const mapDispatchToProps = dispatch => ({
     sendMessage(message)(dispatch)
   },
   toggleCheck: (id) => {
-    console.log('toggle check', id)
     toggleCheck(id)(dispatch)
+  },
+  handleCheckAll: (allSelected) => {
+    handleCheckAll(allSelected)(dispatch)
   }
 })
 

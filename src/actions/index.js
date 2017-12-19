@@ -51,3 +51,13 @@ export function toggleCheck(id) {
     })
   }
 }
+
+export const TOGGLE_SELECT_ALL = 'TOGGLE_SELECT_ALL'
+export function handleCheckAll (allSelected) {
+  return function(dispatch) {
+    dispatch({ 
+      type: 'TOGGLE_SELECT_ALL',
+      allSelected
+    })
+  }
+}
