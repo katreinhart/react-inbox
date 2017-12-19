@@ -12,3 +12,11 @@ export function fetchMessages() {
   }
 }
 
+export const TOGGLE_COMPOSE = 'TOGGLE_COMPOSE'
+export function toggleCompose() {
+  return function(dispatch) {
+    dispatch({ 
+      type: TOGGLE_COMPOSE
+    })
+  }
+}

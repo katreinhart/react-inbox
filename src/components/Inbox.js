@@ -5,7 +5,7 @@ import Toolbar from './Toolbar'
 import MessageList from './MessageList'
 import Compose from './Compose'
 
-import { fetchMessages } from '../actions'
+import { fetchMessages, toggleCompose } from '../actions'
 
 class Inbox extends Component {
   constructor(props) {
@@ -28,7 +28,7 @@ class Inbox extends Component {
   // }
 
   componentDidMount() {
-    
+    fetchMessages()
   }
 
   allAreChecked = () => this.state.messages
@@ -250,9 +250,9 @@ class Inbox extends Component {
 
   composeMessage (e) {
     e.preventDefault()
-    this.setState({ 
-      showCompose: !this.state.showCompose
-    })
+    console.log('sc', this.props.toggleCompose)
+    console.log('d', this.props.dispatch)
+    toggleCompose(this.props.dispatch)
   }
 
   async onSend (e) {
@@ -281,7 +281,7 @@ class Inbox extends Component {
   }
 
   render() {
-    console.log('this.props.messages', this.props.messages)
+    console.log('this.props.showCompose', this.props.showCompose)
     return (
       <div className="App">
         <Toolbar 
@@ -308,13 +308,11 @@ class Inbox extends Component {
 }
 
 const mapStateToProps = state => {
-  console.log('mstp call', state)
   const { messages , showCompose } = state
-  console.log('messages', messages.messages)
   return (
     {
       messages: messages,
-      showCompose: showCompose
+      showCompose: toggleCompose
     }
   )
 }
@@ -323,4 +321,4 @@ const mapStateToProps = state => {
 //   fetchMessages: fetchMessages
 // })
 
-export default connect(mapStateToProps, { fetchMessages })(Inbox);
+export default connect(mapStateToProps, { fetchMessages, toggleCompose })(Inbox);

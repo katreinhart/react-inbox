@@ -1,5 +1,6 @@
 import { combineReducers } from 'redux'
-import { MESSAGES_RECEIVED } from '../actions'
+import { MESSAGES_RECEIVED, TOGGLE_COMPOSE } from '../actions'
+
 
 const initialState = { 
   messages: [],
@@ -17,17 +18,11 @@ function messages(state = initialState, action) {
   }
 }
 
-function showCompose (state = initialState, action ) {
+function toggleCompose (state = initialState, action ) {
   switch(action.type) {
-    case 'SHOW_COMPOSE': 
+    case TOGGLE_COMPOSE:
       return {
-        ...state,
-        showCompose: true
-      }
-    case 'HIDE_COMPOSE':
-      return {
-        ...state,
-        showCompose: false
+        showCompose: !state.showCompose
       }
     default:
       return state
@@ -36,7 +31,7 @@ function showCompose (state = initialState, action ) {
 
 const rootReducer = combineReducers({
   messages: messages,
-  showCompose: showCompose,
+  showCompose: toggleCompose,
 })
 
 export default rootReducer

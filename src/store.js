@@ -4,7 +4,7 @@ import { composeWithDevTools } from 'redux-devtools-extension'
 import rootReducer from './reducers'
 import logger from 'redux-logger'
 
-export const initialState = { 
+const initialState = { 
   messages: [],
   showCompose: false
 }
